@@ -1,14 +1,14 @@
-require("dotenv").config();
-
 const hre = require("hardhat");
 
-const CONTRACT_ADDRESS = "process.env.ContractAddress";
+const INTERACT_CONTRACT_ADDRESS = process.env.InteractContractAddress;
+const ATTEMT_CONTRACT_ADDRESS = process.env.AttemptContractAddress;
 
 async function main() {
-  const Interact = await hre.ethers.getContractAt("Interact", CONTRACT_ADDRESS);
-  const interact= await Interact.deploy();
+  const interact = await hre.ethers.getContractAt("Interact", INTERACT_CONTRACT_ADDRESS);
 
-  await interact.triggerEvent(process.env.ExternalContractAddress);
+  const tx = await interact.triggerEvent(ATTEMT_CONTRACT_ADDRESS);
+
+  await tx.wait();//wait for the transaction to be added to a block
 
   console.log(
     `Event Triggered`
